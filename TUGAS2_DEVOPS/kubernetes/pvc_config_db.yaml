@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-db
+  labels:
+    group: network
+data:
+  MYSQL_ROOT_PASSWORD: password
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: persistentvolumeclaim-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tugas2-devops
+  labels: 
+    group: network
+spec:
+  type: LoadBalancer
+  selector:
+    app: tugas2-devops
+    env : blue_flag
+  ports:
+    - port: 3001
+      targetPort: 3001

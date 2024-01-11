@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    app: db
+    group: network
+spec:
+  selector:
+    matchLabels:
+      app: db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db
+        type: db
+    spec:
+      volumes:                         
+        - name: storage-db
+          persistentVolumeClaim:
+            claimName: persistentvolumeclaim-db
+      containers:
+        - image: mysql:5.6
+          name: db
+          ports:
+            - containerPort: 3306
+          volumeMounts:                 
+            - name: storage-db                
+              mountPath: /var/lib/mysql/data   
+          envFrom:
+            - configMapRef:
+                name: configmap-db
+  strategy:
+    type: Recreate
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels: 
+    group: network
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306  
+      targetPort: 3306 
+  selector:             
+    app: db
